@@ -4,6 +4,7 @@ import { useJobs } from './hooks/useJobs';
 import { Header } from './components/Header';
 import { SearchBar } from './components/SearchBar';
 import { DateFilter, DateFilter as DateFilterType } from './components/DateFilter';
+import { LocationFilter, matchesLocation } from './components/LocationFilter';
 import { JobList } from './components/JobList';
 import { JobDrawer } from './components/JobDrawer';
 
@@ -11,6 +12,7 @@ export default function App() {
   const { jobs, loading, error } = useJobs();
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
+  const [locationFilter, setLocationFilter] = useState('');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   const filteredJobs = useMemo(() => {
@@ -25,8 +27,9 @@ export default function App() {
         if (dateFilter === '7d') return job.daysSincePosted <= 7;
         if (dateFilter === '30d') return job.daysSincePosted <= 30;
         return true;
-      });
-  }, [jobs, searchQuery, dateFilter]);
+      })
+      .filter(job => matchesLocation(job, locationFilter));
+  }, [jobs, searchQuery, dateFilter, locationFilter]);
 
   function handleSelect(job: Job) {
     setSelectedJob(prev => (prev?.id === job.id ? null : job));
@@ -47,6 +50,7 @@ export default function App() {
           <div className="flex-1">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
+          <LocationFilter jobs={jobs} value={locationFilter} onChange={setLocationFilter} />
           <DateFilter active={dateFilter} onChange={setDateFilter} />
         </div>
 
