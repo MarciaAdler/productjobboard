@@ -57,9 +57,9 @@ export default function App() {
         {!loading && !error && (
           <p className="text-xs text-gray-400 mb-3">
             {filteredJobs.length === jobs.length
-              ? `${jobs.length} Product roles`
+              ? `${jobs.length} roles found`
               : `${filteredJobs.length} of ${jobs.length} roles`}
-            {' · '}sourced from Greenhouse, Lever, Ashby, SmartRecruiters & Workable
+            {' · '}updated every hour
           </p>
         )}
 

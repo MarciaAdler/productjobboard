@@ -3,7 +3,6 @@ import { AtsSource } from '../types/job';
 
 const COMING_SOON: AtsSource[] = [
   'bamboohr',
-  'workday',
   'jobvite',
   'icims',
   'jazzhr',

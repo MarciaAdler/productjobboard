@@ -46,7 +46,7 @@ export function JobDrawer({ job, onClose }: JobDrawerProps) {
                 <h2 className="text-lg font-bold text-gray-900 leading-snug">{job.title}</h2>
                 <p className="text-base text-gray-700 mt-1">{job.company}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <StatusBadge days={job.daysSincePosted} />
+                  <StatusBadge postedAt={job.postedAt} />
                   <span className="text-xs text-gray-500">{job.location}</span>
                   {job.isRemote && (
                     <span className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded font-medium">

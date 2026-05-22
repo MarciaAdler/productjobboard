@@ -32,7 +32,7 @@ The scraper fans out to 50+ HTTP requests on cache miss. That latency profile do
 Two packages (client, server) don't justify a build orchestration tool. npm workspaces give shared `node_modules` and a single `npm install`.
 
 ### Vite proxy for /api
-Avoids CORS configuration in development. The React app calls `/api/jobs` and Vite proxies it to `localhost:3001`. In production, an nginx upstream or CDN routing rule does the same job.
+Avoids CORS configuration in development. The React app calls `/api/jobs` and Vite proxies it to `localhost:3002`. In production, an nginx upstream or CDN routing rule does the same job.
 
 ### ATS scraper tier system
 Three tiers: full implementation (Greenhouse, Lever, Ashby), partial (SmartRecruiters, Workable), and placeholder for platforms requiring auth/JS rendering. This made it possible to ship something real without getting blocked on the hard-to-scrape platforms.
@@ -55,7 +55,7 @@ Companies were chosen to represent a mix of well-known product-focused tech comp
 ## Known limitations
 
 - **Coverage depends on seed list size**: Only companies explicitly listed in `companies.ts` are queried. The ATS platforms don't expose a global "all companies" API.
-- **10 of 15 ATS platforms are placeholders**: BambooHR, Workday, Jobvite, iCIMS, JazzHR, UltiPro, ADP, SuccessFactors, Pinpoint, and Manatal all require authentication, subscription keys, or JS rendering and are not implemented in this build.
+- **10 of 15 ATS platforms are placeholders**: BambooHR, Workday, Jobvite, iCIMS, JazzHR, UltiPro, ADP, SuccessFactors, Pinpoint, and Manatal were not implemented in this initial build. Workday, Recruitee, and Personio were added in the 2026-05-22 update.
 - **Salary data is sparse**: Only Lever exposes structured compensation. Most roles will show no salary.
 - **No persistence**: Jobs are cached in memory. Server restart clears the cache, triggering a fresh scrape.
 - **Rate limiting**: No rate limiting is applied to outbound requests per ATS domain. High-volume runs could trigger 429s. A concurrency limiter (p-limit) would mitigate this.

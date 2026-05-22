@@ -27,7 +27,7 @@ export function JobCard({ job, isSelected, onClick }: JobCardProps) {
           </h3>
           <p className="text-sm text-gray-600 mt-0.5">{job.company}</p>
         </div>
-        <StatusBadge days={job.daysSincePosted} />
+        <StatusBadge postedAt={job.postedAt} />
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">

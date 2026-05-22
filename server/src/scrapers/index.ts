@@ -4,6 +4,9 @@ import { leverScraper } from './lever';
 import { ashbyScraper } from './ashby';
 import { smartrecruitersScraper } from './smartrecruiters';
 import { workableScraper } from './workable';
+import { workdayScraper } from './workday';
+import { recruiteeScraper } from './recruitee';
+import { personioScraper } from './personio';
 import { placeholderScraper } from './placeholder';
 
 type Scraper = () => Promise<Job[]>;
@@ -14,6 +17,9 @@ const SCRAPERS: Array<{ name: string; fn: Scraper }> = [
   { name: 'ashby', fn: ashbyScraper },
   { name: 'smartrecruiters', fn: smartrecruitersScraper },
   { name: 'workable', fn: workableScraper },
+  { name: 'workday', fn: workdayScraper },
+  { name: 'recruitee', fn: recruiteeScraper },
+  { name: 'personio', fn: personioScraper },
   { name: 'placeholder', fn: placeholderScraper },
 ];
 
