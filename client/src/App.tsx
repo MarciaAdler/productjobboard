@@ -57,7 +57,7 @@ export default function App() {
             </svg>
             <div>
               <p className="font-medium">Unable to load jobs</p>
-              <p className="text-red-600 mt-0.5 text-xs">Make sure the server is running on port 3002.</p>
+              <p className="text-red-600 mt-0.5 text-xs">Could not reach the jobs API. Please try again shortly.</p>
             </div>
           </div>
         )}
