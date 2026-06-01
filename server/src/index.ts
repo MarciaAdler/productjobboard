@@ -7,7 +7,12 @@ import { runAll } from './scrapers/index';
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-app.use(cors({ origin: ['http://localhost:3000', 'http://127.0.0.1:3000'] }));
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  ...(process.env.CLIENT_ORIGIN ? [process.env.CLIENT_ORIGIN] : []),
+];
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 app.use('/api/jobs', jobsRouter);
