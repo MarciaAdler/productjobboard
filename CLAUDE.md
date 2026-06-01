@@ -1,17 +1,15 @@
-# Product Job Board
+# ProductJobs
 
-Aggregates open Product Manager roles from 11 live sources and displays them in a searchable, filterable job board. Jobs are filtered to US-based and global remote positions only.
+A professional Product Manager job board that aggregates live PM roles from 11 sources, filtered to US + global remote, and presented in a polished, branded interface.
 
 ## What it does
 
-- Pulls PM jobs from 11 live sources: Greenhouse, Lever, Ashby, SmartRecruiters, Workable, Workday, Recruitee, Personio, Remotive, RemoteOK, and The Muse
-- Includes portfolio companies from a16z (Databricks), Sequoia (Instacart), and Primary VC (Justworks) via their ATS boards
-- Filters to US + global remote roles — non-US locations excluded
-- Shows salary on every card ("Salary not listed" when not disclosed)
-- Sub-24h precision on time badges: minutes → hours → days → months
-- Click any job to expand a drawer with company description, requirements, and an Apply button
-- Filter by posting age (All / Today / Last 7 days / Last 30 days) and by location
-- Search by title or company name
+- Aggregates PM jobs from Greenhouse, Lever, Ashby, SmartRecruiters, Workable, Workday, Remotive, RemoteOK, The Muse, Recruitee, and Personio
+- Filters to US + remote only — non-US roles excluded server-side
+- Salary shown on every card — "Salary not listed" when undisclosed
+- Sub-24h time badges: minutes → hours → days → months (color-coded by freshness)
+- Click any card for a detail drawer: company summary, requirements, salary chip, Apply button
+- Location filter (dynamic, from actual job data), date filter, search by title/company
 - Server cache refreshes every 30 min; client re-fetches every hour
 
 ## How to run
@@ -21,89 +19,76 @@ npm install
 npm run dev
 ```
 
-Opens at **http://localhost:3000**. Backend API on port 3002 (proxied via Vite).
+Opens at **http://localhost:3000**. Backend API on port 3002 (Vite proxy).
 
-Force a cache refresh:
-```
-http://localhost:3002/api/jobs?refresh=true
-```
+Force cache refresh: `http://localhost:3002/api/jobs?refresh=true`  
+Health check: `http://localhost:3002/api/health`
 
 ## Tech stack
 
 | Layer | Tech |
 |---|---|
-| Frontend | React 18, Vite, TypeScript, Tailwind CSS |
-| Backend | Node.js, Express, TypeScript, tsx (watch mode) |
-| HTTP | axios, node-html-parser |
+| Frontend | React 18, Vite, TypeScript, Tailwind CSS, Inter font |
+| Backend | Node.js, Express, TypeScript, tsx watch |
+| HTTP + parsing | axios, node-html-parser |
 | Dev runner | concurrently |
 
 ## Folder structure
 
 ```
 productjobboard/
-├── client/               # Vite + React (port 3000)
+├── client/                   # Vite + React (port 3000)
+│   ├── public/favicon.svg    # Brand favicon
 │   └── src/
-│       ├── components/   # UI components
-│       ├── hooks/        # useJobs (hourly auto-refresh)
-│       ├── api/          # fetch wrappers
-│       ├── utils/        # date, salary, ATS labels
-│       └── types/        # Job interface
-└── server/               # Express API (port 3002)
+│       ├── components/       # Header, JobCard, JobDrawer, DateFilter,
+│       │                     # LocationFilter, SearchBar, Skeleton, EmptyState
+│       ├── hooks/            # useJobs (hourly auto-refresh)
+│       ├── utils/            # dateHelpers, salary formatting, ATS labels
+│       └── types/            # Job interface + AtsSource union
+└── server/                   # Express API (port 3002)
     └── src/
-        ├── scrapers/     # One scraper per source
-        ├── routes/       # /api/jobs, /api/health
-        ├── cache/        # In-memory TTL cache (30 min)
-        ├── utils/        # filterPM, filterUS, htmlToText, normalizeJob
-        └── constants/    # Seed company lists per ATS
+        ├── scrapers/         # One file per ATS source (11 active + Getro stub)
+        ├── routes/           # /api/jobs, /api/health
+        ├── cache/            # In-memory TTL cache (30 min)
+        └── utils/            # filterPM, filterUS, htmlToText, normalizeJob
 ```
 
-## Source coverage
+## ATS source coverage
 
 | Source | Status | Notes |
 |---|---|---|
-| Greenhouse | Active | 47 seed companies incl. a16z/Sequoia/Primary VC portfolio |
-| Lever | Active | 18 seed companies |
-| Ashby | Active | 25 seed companies, structured compensation |
-| SmartRecruiters | Active | REST API |
-| Workable | Active | Widget API |
-| Workday | Active | POST search API, 5 enterprise companies |
-| Remotive | Active | Remote-only public API |
-| RemoteOK | Active | Remote-only, structured salary |
-| The Muse | Active | US-filtered, last 90 days |
-| Getro (VC boards) | Blocked | Insight Partners/Techstars/Primary VC — requires auth |
-| Consider (VC boards) | Blocked | a16z/Sequoia — JS SPA, no public API |
-| BambooHR | Planned | No public JSON API |
-| Jobvite | Planned | Requires API key |
-| Others | Planned | Auth required |
+| Greenhouse | ✅ Active | 47 seed companies |
+| Lever | ✅ Active | 18 seed companies, salary when listed |
+| Ashby | ✅ Active | 25 companies + structured compensation |
+| SmartRecruiters | ✅ Active | Company description + qualifications |
+| Workable | ✅ Active | Widget API |
+| Workday | ✅ Active | Full job details fetched per-role |
+| Remotive | ✅ Active | Remote product-management category |
+| RemoteOK | ✅ Active | Structured salary min/max |
+| The Muse | ✅ Active | US-filtered, last 90 days |
+| Recruitee | ✅ Active | European companies |
+| Personio | ✅ Active | XML feed with full descriptions |
+| Getro (VC boards) | 🔒 Needs API key | Insight Partners, Techstars, Primary VC |
+| Consider (VC boards) | 🔒 Needs Playwright | a16z, Sequoia |
 
-## VC portfolio coverage
+## Expanding coverage
 
-| VC Firm | Approach | Companies |
-|---|---|---|
-| a16z | Direct ATS | Databricks (Greenhouse) |
-| Sequoia | Direct ATS | Instacart (Greenhouse) |
-| Primary VC | Direct ATS | Justworks (Greenhouse) |
-| Insight Partners | Getro (blocked) | Auth required |
-| Techstars | Getro (blocked) | Auth required |
-| Pear VC | No board found | — |
-| Boost VC | No board found | — |
+Add company slugs to `server/src/constants/companies.ts`. Each valid Greenhouse / Lever / Ashby slug adds more jobs on the next cache refresh. For Workday, both `tenant` and `board` must match exactly.
 
-## API endpoints
+## Design system
 
-- `GET /api/jobs` — `Job[]`, US/remote only, newest first
-- `GET /api/jobs?refresh=true` — bust cache and re-scrape
-- `GET /api/jobs/:id` — single job
-- `GET /api/health` — cache status + job count
+- **Primary color:** `brand-600` = `#7c3aed` (violet)
+- **Font:** Inter (Google Fonts CDN)
+- **Card selected state:** violet left accent bar + `ring-1 ring-brand-300`
+- **Status badges:** emerald (< 24h) → brand-violet (< 7d) → slate (older)
+- **Salary:** emerald chip with dollar icon when data exists
+- **Drawer backdrop:** `bg-slate-900/30 backdrop-blur-[2px]`
 
-## Growing coverage
+## Next steps
 
-Add company slugs to `server/src/constants/companies.ts`. Each valid Greenhouse/Lever/Ashby slug returns more jobs on the next cache refresh. To unlock Getro VC boards, a Getro API key is needed (register at getro.com).
+See `PLAN.md` for the full roadmap. Top priorities:
 
-## What's coming next
-
-- Getro API integration (needs API key for Insight Partners, Techstars, Primary VC boards)
-- Playwright scraper for Consider boards (a16z, Sequoia)
-- More VC portfolio company slugs
-- Email/Slack alerts for new matches
-- Saved jobs (requires user accounts)
-- Salary range filter
+1. **Deploy** — add a Dockerfile or Railway/Render config; serve `client/dist/` from Express in production
+2. **Getro API key** — unlocks Insight Partners (11k jobs) and Techstars (6k jobs) VC boards
+3. **Saved jobs + email alerts** — requires user accounts (start with localStorage for saved jobs)
+4. **Salary range filter** — slider over `salaryMin`/`salaryMax` (data already present for 52 roles)
