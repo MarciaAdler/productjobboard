@@ -1,12 +1,20 @@
 // Greenhouse: boards-api.greenhouse.io/v1/boards/{slug}/jobs
 export const GREENHOUSE_COMPANIES = [
+  // Original seed
   'stripe', 'squarespace', 'airtable', 'intercom', 'dropbox',
   'duolingo', 'brex', 'coinbase', 'discord', 'robinhood',
   'plaid', 'lattice', 'gusto', 'figma', 'amplitude',
-  // additional verified slugs
+  // Added 2026-05-22
   'airbnb', 'twilio', 'okta', 'pagerduty', 'faire',
   'contentful', 'typeform', 'cloudflare', 'datadoghq', 'boxinc',
   'braze', 'samsara', 'mixpanel', 'asana', 'n26',
+  // Added 2026-06-01
+  'lyft', 'reddit', 'pinterest', 'gitlab', 'grafanalabs',
+  'temporaltechnologies', 'cockroachlabs', 'scaleai', 'anthropic',
+  // VC portfolio companies (2026-06-01) — verified slugs only
+  'databricks',  // a16z portfolio
+  'instacart',   // Sequoia portfolio
+  'justworks',   // Primary VC portfolio
 ];
 
 // Lever: api.lever.co/v0/postings/{slug}?mode=json
@@ -17,14 +25,17 @@ export const LEVER_COMPANIES = [
   'productboard', 'hotjar', 'gem',
 ];
 
-// Ashby: api.ashbyhq.com/posting-api/job-board/{slug}
+// Ashby: api.ashbyhq.com/posting-api/job-board/{slug}?includeCompensation=true
 export const ASHBY_COMPANIES = [
+  // Original seed
   'notion', 'linear', 'ramp', 'deel', 'supabase',
   'attio', 'liveblocks', 'resend', 'trigger', 'cal',
   'rows', 'novu', 'raycast', 'vercel', 'clerk',
-  // additional verified slugs
+  // Added 2026-05-22
   'harvey', 'perplexity', 'cohere', 'cursor', 'anyscale',
   'plaid', 'workos', 'zapier',
+  // Added 2026-06-01
+  'openai', 'weaviate',
 ];
 
 // SmartRecruiters: api.smartrecruiters.com/v1/companies/{slug}/postings

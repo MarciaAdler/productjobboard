@@ -53,9 +53,9 @@ export function JobDrawer({ job, onClose }: JobDrawerProps) {
                       Remote
                     </span>
                   )}
-                  {salary && (
-                    <span className="text-xs text-emerald-700 font-semibold">{salary}</span>
-                  )}
+                  <span className={`text-xs font-semibold ${salary ? 'text-emerald-700' : 'text-gray-400'}`}>
+                    {salary ?? 'Salary not listed'}
+                  </span>
                   <span className="text-xs text-gray-400">
                     via {ATS_LABELS[job.atsSource] || job.atsSource}
                   </span>

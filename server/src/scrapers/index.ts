@@ -7,7 +7,12 @@ import { workableScraper } from './workable';
 import { workdayScraper } from './workday';
 import { recruiteeScraper } from './recruitee';
 import { personioScraper } from './personio';
+import { remotiveScraper } from './remotive';
+import { remoteokScraper } from './remoteok';
+import { themuseScraper } from './themuse';
+import { getroScraper } from './getro';
 import { placeholderScraper } from './placeholder';
+import { isUSOrRemote } from '../utils/filterUS';
 
 type Scraper = () => Promise<Job[]>;
 
@@ -20,6 +25,10 @@ const SCRAPERS: Array<{ name: string; fn: Scraper }> = [
   { name: 'workday', fn: workdayScraper },
   { name: 'recruitee', fn: recruiteeScraper },
   { name: 'personio', fn: personioScraper },
+  { name: 'remotive', fn: remotiveScraper },
+  { name: 'remoteok', fn: remoteokScraper },
+  { name: 'themuse', fn: themuseScraper },
+  { name: 'getro (vc boards)', fn: getroScraper },
   { name: 'placeholder', fn: placeholderScraper },
 ];
 
@@ -38,14 +47,19 @@ export async function runAll(): Promise<Job[]> {
 
   const allJobs = results.flatMap(r => (r.status === 'fulfilled' ? r.value : []));
 
-  // Deduplicate by id, fallback dedupe on title+company
-  const seen = new Set<string>();
+  // Filter to US + remote only
+  const usJobs = allJobs.filter(isUSOrRemote);
+  const filtered = allJobs.length - usJobs.length;
+  if (filtered > 0) console.log(`[scrapers] Filtered ${filtered} non-US jobs`);
+
+  // Deduplicate: by id first, then by title+company
+  const seenIds = new Set<string>();
   const seenTitleCompany = new Set<string>();
-  const unique = allJobs.filter(job => {
-    if (seen.has(job.id)) return false;
+  const unique = usJobs.filter(job => {
+    if (seenIds.has(job.id)) return false;
     const tc = `${job.title.toLowerCase()}::${job.company.toLowerCase()}`;
     if (seenTitleCompany.has(tc)) return false;
-    seen.add(job.id);
+    seenIds.add(job.id);
     seenTitleCompany.add(tc);
     return true;
   });
@@ -53,6 +67,6 @@ export async function runAll(): Promise<Job[]> {
   // Sort by postedAt descending (newest first)
   unique.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
 
-  console.log(`[scrapers] Done: ${unique.length} unique PM jobs in ${Date.now() - start}ms`);
+  console.log(`[scrapers] Done: ${unique.length} unique US/remote PM jobs in ${Date.now() - start}ms`);
   return unique;
 }

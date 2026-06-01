@@ -45,9 +45,9 @@ export function JobCard({ job, isSelected, onClick }: JobCardProps) {
           </span>
         )}
 
-        {salary && (
-          <span className="text-xs text-emerald-700 font-medium">{salary}</span>
-        )}
+        <span className={`text-xs font-medium ${salary ? 'text-emerald-700' : 'text-gray-400'}`}>
+          {salary ?? 'Salary not listed'}
+        </span>
 
         <span className="ml-auto text-xs text-gray-400">
           {ATS_LABELS[job.atsSource] || job.atsSource}
