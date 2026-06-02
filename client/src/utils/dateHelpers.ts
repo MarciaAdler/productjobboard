@@ -13,10 +13,10 @@ export function formatTimeAgo(postedAt: string): string {
 export function timeAgoColor(postedAt: string): string {
   const diffMs = Date.now() - new Date(postedAt).getTime();
   const hours = diffMs / 3600000;
-  if (hours < 24) return 'bg-emerald-100 text-emerald-700';
-  if (hours < 24 * 7) return 'bg-brand-100 text-brand-700';
-  if (hours < 24 * 30) return 'bg-slate-100 text-slate-500';
-  return 'bg-slate-50 text-slate-400';
+  if (hours < 24) return 'bg-emerald-100 text-emerald-800';
+  if (hours < 24 * 7) return 'bg-brand-100 text-brand-800';
+  if (hours < 24 * 30) return 'bg-slate-100 text-slate-700';
+  return 'bg-slate-100 text-slate-700';
 }
 
 export function formatSalary(min: number | null, max: number | null, raw: string | null): string | null {

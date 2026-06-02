@@ -74,10 +74,10 @@ export default function App() {
         {/* Results meta */}
         {!loading && !error && (
           <div className="flex items-center justify-between mb-4">
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600">
               {filteredJobs.length === jobs.length
-                ? <><span className="font-medium text-slate-500">{jobs.length.toLocaleString()} roles</span> found · refreshes every hour</>
-                : <><span className="font-medium text-slate-500">{filteredJobs.length.toLocaleString()}</span> of {jobs.length.toLocaleString()} roles</>
+                ? <><span className="font-medium text-slate-700">{jobs.length.toLocaleString()} roles</span> found · refreshes every hour</>
+                : <><span className="font-medium text-slate-700">{filteredJobs.length.toLocaleString()}</span> of {jobs.length.toLocaleString()} roles</>
               }
             </p>
             {hasFilters && (

@@ -44,15 +44,15 @@ export function JobCard({ job, isSelected, onClick }: JobCardProps) {
               }`}>
                 {job.title}
               </h3>
-              <p className="text-sm text-slate-500 mt-0.5 truncate">{job.company}</p>
+              <p className="text-sm text-slate-600 mt-0.5 truncate">{job.company}</p>
             </div>
             <StatusBadge postedAt={job.postedAt} />
           </div>
 
           {/* Bottom row: location + salary + source */}
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <span className="flex items-center gap-1 text-xs text-slate-500">
-              <svg className="h-3.5 w-3.5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <span className="flex items-center gap-1 text-xs text-slate-600">
+              <svg className="h-3.5 w-3.5 flex-shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
               </svg>
@@ -65,11 +65,11 @@ export function JobCard({ job, isSelected, onClick }: JobCardProps) {
               </span>
             )}
 
-            <span className={`text-xs font-medium ${salary ? 'text-emerald-700' : 'text-slate-300'}`}>
+            <span className={`text-xs font-medium ${salary ? 'text-emerald-700' : 'text-slate-500'}`}>
               {salary ?? 'Salary not listed'}
             </span>
 
-            <span className="ml-auto text-xs text-slate-300 flex-shrink-0">
+            <span className="ml-auto text-xs text-slate-500 flex-shrink-0">
               {ATS_LABELS[job.atsSource] || job.atsSource}
             </span>
           </div>
