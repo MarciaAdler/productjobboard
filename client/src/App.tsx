@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Job } from './types/job';
 import { useJobs } from './hooks/useJobs';
 import { Header } from './components/Header';
@@ -104,6 +105,7 @@ export default function App() {
       </main>
 
       <JobDrawer job={selectedJob} onClose={() => setSelectedJob(null)} />
+      <Analytics />
     </div>
   );
 }
