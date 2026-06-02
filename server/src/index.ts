@@ -12,7 +12,18 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
   ...(process.env.CLIENT_ORIGIN ? [process.env.CLIENT_ORIGIN] : []),
 ];
-app.use(cors({ origin: allowedOrigins }));
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, Postman)
+    if (!origin) return callback(null, true);
+    // Allow any Vercel preview deployment and explicitly listed origins
+    if (allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS: ${origin} not allowed`));
+  },
+}));
 app.use(express.json());
 
 app.use('/api/jobs', jobsRouter);
