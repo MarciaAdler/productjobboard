@@ -50,8 +50,14 @@ function removeCodeLikeLines(text: string): string {
 export function htmlToText(html: string | null | undefined): string {
   if (!html) return '';
 
+  // Some ATS (e.g. Greenhouse) return entity-encoded HTML: &lt;p&gt; instead of <p>.
+  // Decode angle-bracket entities first so node-html-parser sees real tags.
+  const preDecoded = html
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+
   // Strip style/script blocks and their content before any parsing
-  const stripped = html
+  const stripped = preDecoded
     .replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(/<script[\s\S]*?<\/script>/gi, '');
 
