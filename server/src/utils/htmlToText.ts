@@ -27,13 +27,21 @@ function removeCodeLikeLines(text: string): string {
     .filter(line => {
       const t = line.trim();
       if (!t) return true;
-      // CSS selectors
-      if (/^[.#][a-zA-Z][\w-]*\s*\{/.test(t)) return false;
+      // CSS selectors (.foo { or #bar {)
+      if (/^[.#][a-zA-Z][\w-]*[\s,{]/.test(t)) return false;
+      // CSS @-rules
+      if (/^@(media|keyframes|font-face|import|charset|supports)/i.test(t)) return false;
       // CSS property lines (key: value;)
-      if (/^[a-z-]{3,30}\s*:\s*.{1,80};$/.test(t)) return false;
-      // Lines with excessive braces/brackets (code artifacts)
+      if (/^[a-z-]{3,30}\s*:\s*.{1,100};$/.test(t)) return false;
+      // Standalone closing brace lines
+      if (/^\s*\}[\s;]*$/.test(t)) return false;
+      // Lines that look like HTML attributes leaking through
+      if (/^(class|style|id|data-[\w-]+)\s*=\s*["']/.test(t)) return false;
+      // Long strings with no spaces (base64, hashes, minified code)
+      if (t.length > 80 && !t.includes(' ')) return false;
+      // Lines with excessive code-like characters
       const specials = (t.match(/[{};()=<>\\]/g) || []).length;
-      if (specials > 4 && t.length < 150) return false;
+      if (specials > 3 && t.length < 200) return false;
       return true;
     })
     .join('\n');
@@ -42,8 +50,13 @@ function removeCodeLikeLines(text: string): string {
 export function htmlToText(html: string | null | undefined): string {
   if (!html) return '';
 
+  // Strip style/script blocks and their content before any parsing
+  const stripped = html
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '');
+
   // Insert newlines around block-level elements before stripping tags
-  const expanded = html
+  const expanded = stripped
     .replace(/<\/(p|div|h[1-6]|li|section|article|tr|blockquote)\s*>/gi, '\n')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<hr\s*\/?>/gi, '\n');

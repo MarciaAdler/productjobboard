@@ -76,9 +76,7 @@ export function JobDrawer({ job, onClose }: JobDrawerProps) {
                         </svg>
                         {salary}
                       </MetaChip>
-                    ) : (
-                      <span className="text-xs text-slate-500 px-1">Salary not listed</span>
-                    )}
+                    ) : null}
 
                     <MetaChip className="bg-slate-100 text-slate-600 ml-auto">
                       via {ATS_LABELS[job.atsSource] || job.atsSource}

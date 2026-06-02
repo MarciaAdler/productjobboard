@@ -31,6 +31,31 @@ export function parseSalary(raw: string | null | undefined): {
   };
 }
 
+export function extractSalaryFromText(text: string | null | undefined): ReturnType<typeof parseSalary> {
+  if (!text) return { salaryRaw: null, salaryMin: null, salaryMax: null };
+
+  const patterns = [
+    // $120,000 - $150,000 or $120k-$150k
+    /\$[\d,]+k?\s*(?:–|-|to)\s*\$[\d,]+k?/i,
+    // $120,000/yr or $120k per year
+    /\$[\d,]+k?(?:\s*\/\s*(?:yr|year|hour|hr)|\s+per\s+(?:year|hour))?/i,
+    // salary: $120,000 or compensation: 120k-150k
+    /(?:salary|compensation|pay|base|OTE)[:\s]+\$?[\d,]+k?\s*(?:–|-|to)?\s*\$?[\d,]+k?/i,
+    // 120,000 - 150,000 USD
+    /[\d]{2,3},\d{3}\s*(?:–|-|to)\s*[\d]{2,3},\d{3}\s*(?:USD|CAD|GBP)?/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      const result = parseSalary(match[0]);
+      if (result.salaryMin) return result;
+    }
+  }
+
+  return { salaryRaw: null, salaryMin: null, salaryMax: null };
+}
+
 export function daysSince(dateStr: string | number | null | undefined): number {
   if (!dateStr) return 0;
   const posted = typeof dateStr === 'number' ? new Date(dateStr) : new Date(dateStr);

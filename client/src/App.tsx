@@ -10,7 +10,7 @@ import { JobList } from './components/JobList';
 import { JobDrawer } from './components/JobDrawer';
 
 export default function App() {
-  const { jobs, loading, error } = useJobs();
+  const { jobs, loading, error, lastRefreshed } = useJobs();
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
   const [locationFilter, setLocationFilter] = useState('');
@@ -48,6 +48,19 @@ export default function App() {
     <div className="min-h-screen bg-slate-50">
       <Header jobCount={filteredJobs.length} loading={loading} />
 
+      {/* Sticky filter bar */}
+      <div className="sticky top-16 z-[9] bg-slate-50 border-b border-slate-200 shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex-1">
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            </div>
+            <LocationFilter jobs={jobs} value={locationFilter} onChange={setLocationFilter} />
+            <DateFilter active={dateFilter} onChange={setDateFilter} />
+          </div>
+        </div>
+      </div>
+
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
 
         {/* Error state */}
@@ -63,23 +76,20 @@ export default function App() {
           </div>
         )}
 
-        {/* Filter bar */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-5">
-          <div className="flex-1">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          </div>
-          <LocationFilter jobs={jobs} value={locationFilter} onChange={setLocationFilter} />
-          <DateFilter active={dateFilter} onChange={setDateFilter} />
-        </div>
-
         {/* Results meta */}
         {!loading && !error && (
           <div className="flex items-center justify-between mb-4">
             <p className="text-xs text-slate-600">
               {filteredJobs.length === jobs.length
-                ? <><span className="font-medium text-slate-700">{jobs.length.toLocaleString()} roles</span> found · refreshes every hour</>
+                ? <><span className="font-medium text-slate-700">{jobs.length.toLocaleString()} roles</span> found</>
                 : <><span className="font-medium text-slate-700">{filteredJobs.length.toLocaleString()}</span> of {jobs.length.toLocaleString()} roles</>
               }
+              {lastRefreshed && (
+                <span className="text-slate-500"> · updated {lastRefreshed.toLocaleString(undefined, {
+                  month: 'short', day: 'numeric',
+                  hour: 'numeric', minute: '2-digit',
+                })}</span>
+              )}
             </p>
             {hasFilters && (
               <button

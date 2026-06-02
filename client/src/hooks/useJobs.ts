@@ -6,6 +6,7 @@ interface UseJobsResult {
   jobs: Job[];
   loading: boolean;
   error: string | null;
+  lastRefreshed: Date | null;
   refetch: () => void;
 }
 
@@ -13,6 +14,7 @@ export function useJobs(): UseJobsResult {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export function useJobs(): UseJobsResult {
       .then(data => {
         if (!cancelled) {
           setJobs(data);
+          setLastRefreshed(new Date());
           setLoading(false);
         }
       })
@@ -47,6 +50,7 @@ export function useJobs(): UseJobsResult {
     jobs,
     loading,
     error,
+    lastRefreshed,
     refetch: () => setTick(t => t + 1),
   };
 }

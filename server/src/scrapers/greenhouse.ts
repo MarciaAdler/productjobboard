@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { GREENHOUSE_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { extractSalaryFromText, daysSince } from '../utils/normalizeJob';
 
 interface GHJob {
   id: number;
@@ -46,7 +46,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           isRemote: /remote/i.test(location),
           postedAt,
           daysSincePosted: daysSince(postedAt),
-          ...parseSalary(null),
+          ...extractSalaryFromText(descText),
           applyUrl: j.absolute_url,
           companyDescription: null,
           descriptionText: descText.slice(0, 2000),
