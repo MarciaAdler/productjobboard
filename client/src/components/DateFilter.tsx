@@ -22,7 +22,7 @@ export function DateFilter({ active, onChange }: DateFilterProps) {
           className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${
             active === opt.value
               ? 'bg-white text-brand-700 shadow-sm font-semibold'
-              : 'text-slate-500 hover:text-slate-700'
+              : 'text-slate-700 hover:text-slate-900'
           }`}
         >
           {opt.label}
