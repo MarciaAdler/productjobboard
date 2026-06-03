@@ -50,4 +50,5 @@ export const ATS_LABELS: Record<string, string> = {
   successfactors: 'SuccessFactors',
   pinpoint: 'Pinpoint',
   manatal: 'Manatal',
+  rippling: 'Rippling',
 };

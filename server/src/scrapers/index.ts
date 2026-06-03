@@ -12,6 +12,7 @@ import { remoteokScraper } from './remoteok';
 import { themuseScraper } from './themuse';
 import { getroScraper } from './getro';
 import { placeholderScraper } from './placeholder';
+import { ripplingScraper } from './rippling';
 import { isUSOrRemote } from '../utils/filterUS';
 
 type Scraper = () => Promise<Job[]>;
@@ -29,6 +30,7 @@ const SCRAPERS: Array<{ name: string; fn: Scraper }> = [
   { name: 'remoteok', fn: remoteokScraper },
   { name: 'themuse', fn: themuseScraper },
   { name: 'getro (vc boards)', fn: getroScraper },
+  { name: 'rippling', fn: ripplingScraper },
   { name: 'placeholder', fn: placeholderScraper },
 ];
 

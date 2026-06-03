@@ -19,7 +19,8 @@ export type AtsSource =
   | 'adp'
   | 'successfactors'
   | 'pinpoint'
-  | 'manatal';
+  | 'manatal'
+  | 'rippling';
 
 export interface Job {
   id: string;

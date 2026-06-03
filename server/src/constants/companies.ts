@@ -69,6 +69,41 @@ export const RECRUITEE_COMPANIES = [
   'bunq', 'betty-blocks', 'cm', 'trusted-shops',
 ];
 
+// Rippling: ats.rippling.com/api/v2/board/{slug}/jobs
+export const RIPPLING_COMPANIES = [
+  // Original seed (verified)
+  'anaconda', 'theinformation-jobs', 'integratecom-inc', 'havenlybrands',
+  'phase2-careers', 'inrule', 'crisp-careers', 'partnerco',
+  'gaiias-open-positions', 'just-appraised-jobs',
+  // Tech / SaaS / Product-focused
+  'rippling', 'dropzone-ai', 'commandlink', 'corva', 'plenful',
+  'pdq', 'closinglock', 'bettercomp', 'hearth-careers', 'meddicc',
+  'campspot', 'nestocloud', 'solv-health', 'wellright', 'useorigin',
+  'rebrandly', 'hqo', 'button', 'fieldpulse', 'rearc',
+  'skillable-careers', 'steno-careers-page', 'webull', 'tixr', 'shipium',
+  'patientnow', 'rentspree', 'theguarantors-open-positions', 'linxup',
+  'framework', 'chess', 'qu-careers', 'workweek', 'everyday-speech',
+  'gitar-careers', 'loti-ai-inc', 'raptor-maps-inc',
+  // Fintech / Payments
+  'supernova-technology', 'orion180',
+  // AI / Data
+  'tavernresearch', 'mozn-ai', 'valkyrie', 'createmusicgroup', 'sleuth',
+  'measurabljobs',
+  // Health
+  'lemonaid-health', 'legitscript-careers',
+  // Cybersecurity / Defense / Deep tech
+  'singularity-defense', 'forterra', 'd-wave-quantum',
+  // Logistics / Supply chain
+  'veryable-careers', 'routeware-careers',
+  // Climate / Energy
+  'torus', 'rewiring-america-careers',
+  // Consumer / Media
+  'turtlebox', 'kick', 'journaltech',
+  // Other verified tech
+  'riot-platforms-careers', 'whisker-labs-careers', 'appriss-retail',
+  'coenterprise', 'moon', 'safety-radar-careers',
+];
+
 // Personio: {slug}.jobs.personio.{tld}/search.json
 export interface PersonioCompany {
   slug: string;
