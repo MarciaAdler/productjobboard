@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { GREENHOUSE_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { extractSalaryFromText, daysSince } from '../utils/normalizeJob';
+import { extractSalaryFromText, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface GHJob {
   id: number;
@@ -49,8 +49,8 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           ...extractSalaryFromText(descText),
           applyUrl: j.absolute_url,
           companyDescription: null,
-          descriptionText: descText.slice(0, 2000),
-          requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+          descriptionText: trimAtBoundary(descText, 3000),
+          requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
         };
       });
   } catch {

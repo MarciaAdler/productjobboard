@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { SMARTRECRUITERS_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface SRPosting {
   id: string;
@@ -87,8 +87,8 @@ async function fetchCompany(slug: string): Promise<Job[]> {
         ...parseSalary(null),
         applyUrl: merged.applyUrl || `https://jobs.smartrecruiters.com/${slug}/${j.id}`,
         companyDescription: companyDesc,
-        descriptionText: descText ? descText.slice(0, 2000) : null,
-        requirements: requirements ? requirements.slice(0, 1000) : null,
+        descriptionText: descText ? trimAtBoundary(descText, 3000) : null,
+        requirements: requirements ? trimAtBoundary(requirements, 1200) : null,
       };
     });
   } catch {

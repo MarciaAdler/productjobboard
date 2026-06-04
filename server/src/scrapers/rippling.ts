@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { RIPPLING_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, extractSalaryFromText, daysSince } from '../utils/normalizeJob';
+import { parseSalary, extractSalaryFromText, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface RipplingListItem {
   id: string;
@@ -91,9 +91,9 @@ async function fetchDetail(slug: string, item: RipplingListItem): Promise<Job | 
       daysSincePosted: daysSince(postedAt),
       ...salary,
       applyUrl: d.url || item.url,
-      companyDescription: companyText ? companyText.slice(0, 500) : null,
-      descriptionText: roleText ? roleText.slice(0, 2000) : fullText.slice(0, 2000),
-      requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+      companyDescription: companyText ? trimAtBoundary(companyText, 600) : null,
+      descriptionText: roleText ? trimAtBoundary(roleText, 3000) : trimAtBoundary(fullText, 3000),
+      requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
     };
   } catch {
     return null;

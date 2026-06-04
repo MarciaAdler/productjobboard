@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Job } from '../types/job';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface RemotiveJob {
   id: number;
@@ -58,8 +58,8 @@ export async function remotiveScraper(): Promise<Job[]> {
           ...parseSalary(j.salary || null),
           applyUrl: j.url,
           companyDescription: null,
-          descriptionText: descText.slice(0, 2000),
-          requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+          descriptionText: trimAtBoundary(descText, 3000),
+          requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
         };
       });
   } catch {

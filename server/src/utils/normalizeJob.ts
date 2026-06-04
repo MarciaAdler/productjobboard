@@ -56,6 +56,18 @@ export function extractSalaryFromText(text: string | null | undefined): ReturnTy
   return { salaryRaw: null, salaryMin: null, salaryMax: null };
 }
 
+// Trim text to maxLen, ending at a paragraph, sentence, or word boundary — never mid-word.
+export function trimAtBoundary(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  const chunk = text.slice(0, maxLen);
+  const para = chunk.lastIndexOf('\n\n');
+  if (para > maxLen * 0.6) return chunk.slice(0, para).trimEnd();
+  const sentence = chunk.search(/[.!?][^.!?]*$/);
+  if (sentence > maxLen * 0.5) return chunk.slice(0, sentence + 1).trimEnd();
+  const word = chunk.lastIndexOf(' ');
+  return (word > 0 ? chunk.slice(0, word) : chunk).trimEnd();
+}
+
 export function daysSince(dateStr: string | number | null | undefined): number {
   if (!dateStr) return 0;
   const posted = typeof dateStr === 'number' ? new Date(dateStr) : new Date(dateStr);

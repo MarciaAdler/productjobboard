@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { RECRUITEE_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface RecruiteeSalary {
   min: number | null;
@@ -53,8 +53,8 @@ async function fetchCompany(slug: string): Promise<Job[]> {
         // published_at format: "2026-05-21 07:41:12 UTC"
         const postedAt = new Date(o.published_at.replace(' UTC', 'Z').replace(' ', 'T')).toISOString();
         const salaryStr = formatRecruiteeSalary(o.salary);
-        const descText = o.description ? htmlToText(o.description).slice(0, 2000) : null;
-        const reqText = o.requirements ? htmlToText(o.requirements).slice(0, 1000) : null;
+        const descText = o.description ? trimAtBoundary(htmlToText(o.description), 3000) : null;
+        const reqText = o.requirements ? trimAtBoundary(htmlToText(o.requirements), 1200) : null;
         return {
           id: `recruitee-${o.id}`,
           atsSource: 'recruitee' as const,

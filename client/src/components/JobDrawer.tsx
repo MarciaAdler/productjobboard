@@ -3,6 +3,17 @@ import { Job } from '../types/job';
 import { StatusBadge } from './StatusBadge';
 import { formatSalary, ATS_LABELS } from '../utils/dateHelpers';
 
+function summarize(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  const chunk = text.slice(0, maxLen);
+  const para = chunk.lastIndexOf('\n\n');
+  if (para > maxLen * 0.6) return chunk.slice(0, para).trimEnd() + '…';
+  const sentence = chunk.search(/[.!?][^.!?]*$/);
+  if (sentence > maxLen * 0.5) return chunk.slice(0, sentence + 1).trimEnd() + '…';
+  const word = chunk.lastIndexOf(' ');
+  return (word > 0 ? chunk.slice(0, word) : chunk).trimEnd() + '…';
+}
+
 interface JobDrawerProps {
   job: Job | null;
   onClose: () => void;
@@ -103,21 +114,29 @@ export function JobDrawer({ job, onClose }: JobDrawerProps) {
                   {job.companyDescription && (
                     <section className="px-6 py-5">
                       <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">About {job.company}</h3>
-                      <p className="text-sm text-slate-700 leading-relaxed">{job.companyDescription}</p>
+                      <p className="text-sm text-slate-700 leading-relaxed">{summarize(job.companyDescription, 300)}</p>
                     </section>
                   )}
 
                   {job.requirements && (
                     <section className="px-6 py-5">
                       <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">Key Requirements</h3>
-                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{job.requirements}</p>
+                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{summarize(job.requirements, 700)}</p>
                     </section>
                   )}
 
                   {job.descriptionText && (
                     <section className="px-6 py-5">
                       <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">About the Role</h3>
-                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{job.descriptionText}</p>
+                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{summarize(job.descriptionText, 500)}</p>
+                      <a
+                        href={job.applyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-3 text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline"
+                      >
+                        Read full job description →
+                      </a>
                     </section>
                   )}
                 </div>

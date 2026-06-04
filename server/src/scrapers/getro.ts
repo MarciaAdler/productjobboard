@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Job } from '../types/job';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface GetroBoard {
   url: string;
@@ -72,7 +72,7 @@ function mapGetroJob(raw: Record<string, unknown>, vcFirm: string): Job | null {
     (raw.jobUrl as string) ||
     '';
   const descRaw = (raw.description as string) || (raw.descriptionHtml as string) || null;
-  const descText = descRaw ? htmlToText(descRaw).slice(0, 2000) : null;
+  const descText = descRaw ? trimAtBoundary(htmlToText(descRaw), 3000) : null;
   const salaryStr = (raw.salary as string) || (raw.compensation as string) || null;
 
   return {

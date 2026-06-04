@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Job } from '../types/job';
 import { LEVER_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface LeverJob {
   id: string;
@@ -63,8 +63,8 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           ...parseSalary(salaryStr),
           applyUrl: j.applyUrl || j.hostedUrl,
           companyDescription: null,
-          descriptionText: desc.slice(0, 2000),
-          requirements: reqList ? reqList.content.replace(/<[^>]+>/g, ' ').trim().slice(0, 1000) : null,
+          descriptionText: trimAtBoundary(desc, 3000),
+          requirements: reqList ? trimAtBoundary(reqList.content.replace(/<[^>]+>/g, ' ').trim(), 1200) : null,
         };
       });
   } catch {

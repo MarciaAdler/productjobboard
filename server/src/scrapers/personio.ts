@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { PERSONIO_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 // Extract content between XML tags, stripping CDATA wrappers
 function xmlTag(xml: string, tag: string): string {
@@ -83,8 +83,8 @@ async function fetchCompany(company: typeof PERSONIO_COMPANIES[0]): Promise<Job[
         ...parseSalary(salary || null),
         applyUrl: `https://${slug}.jobs.personio.${tld}/job/${id}`,
         companyDescription: null,
-        descriptionText: descText ? descText.slice(0, 2000) : null,
-        requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+        descriptionText: descText ? trimAtBoundary(descText, 3000) : null,
+        requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
       });
     }
 

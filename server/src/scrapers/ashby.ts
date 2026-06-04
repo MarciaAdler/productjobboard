@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { ASHBY_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface CompensationComponent {
   compensationType: string;
@@ -75,7 +75,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
       .map(j => {
         const postedAt = j.publishedAt || new Date().toISOString();
         const rawDesc = j.descriptionPlain || htmlToText(j.descriptionHtml);
-        const descText = rawDesc.slice(0, 2000);
+        const descText = trimAtBoundary(rawDesc, 3000);
         const reqMatch = rawDesc.match(
           /(?:requirements?|qualifications?|what you.ll need|we.re looking for)[:\s]*([\s\S]{50,1500}?)(?:\n\n|$)/i
         );
@@ -93,7 +93,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           applyUrl: j.applyUrl || j.jobUrl || `https://jobs.ashbyhq.com/${slug}/${j.id}`,
           companyDescription: companyDesc,
           descriptionText: descText,
-          requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+          requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
         };
       });
   } catch {

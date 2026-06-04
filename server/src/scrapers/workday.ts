@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { WORKDAY_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface WorkdayPosting {
   title: string;
@@ -78,8 +78,8 @@ async function fetchDetail(applyUrl: string): Promise<{ descriptionText: string 
       /(?:requirements?|qualifications?|what you.ll need|we.re looking for|you will bring)[:\s]+([\s\S]{30,1000}?)(?:\n\n|$)/i
     );
     return {
-      descriptionText: text.slice(0, 2000) || null,
-      requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
+      descriptionText: trimAtBoundary(text, 3000) || null,
+      requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,
     };
   } catch {
     return { descriptionText: null, requirements: null };

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Job } from '../types/job';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { daysSince } from '../utils/normalizeJob';
+import { daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface RemoteOKJob {
   slug: string;
@@ -54,7 +54,7 @@ export async function remoteokScraper(): Promise<Job[]> {
           salaryMax: hasSalary && j.salary_max > 0 ? j.salary_max : null,
           applyUrl: j.apply_url || j.url,
           companyDescription: null,
-          descriptionText: descText.slice(0, 2000),
+          descriptionText: trimAtBoundary(descText, 3000),
           requirements: null,
         };
       });

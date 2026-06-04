@@ -3,7 +3,7 @@ import { Job } from '../types/job';
 import { WORKABLE_COMPANIES } from '../constants/companies';
 import { isPMRole } from '../utils/filterPM';
 import { htmlToText } from '../utils/htmlToText';
-import { parseSalary, daysSince } from '../utils/normalizeJob';
+import { parseSalary, daysSince, trimAtBoundary } from '../utils/normalizeJob';
 
 interface WorkableJob {
   id?: string;
@@ -59,8 +59,8 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           ...parseSalary(null),
           applyUrl: j.application_url || j.url || `https://apply.workable.com/${slug}/j/${id}`,
           companyDescription: companyDesc,
-          descriptionText: descText ? descText.slice(0, 2000) : null,
-          requirements: reqText ? reqText.slice(0, 1000) : null,
+          descriptionText: descText ? trimAtBoundary(descText, 3000) : null,
+          requirements: reqText ? trimAtBoundary(reqText, 1200) : null,
         };
       });
   } catch {
