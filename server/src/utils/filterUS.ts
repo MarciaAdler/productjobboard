@@ -55,13 +55,14 @@ export function isUSOrRemote(job: Job): boolean {
   if (/\b(remote|worldwide|global|anywhere|work from home|wfh)\b/.test(loc)) return true;
   if (/\b(north america|americas|united states|usa)\b/.test(loc)) return true;
 
-  // US state abbreviation after a comma (e.g., "San Francisco, CA")
-  if (/,\s*(al|ak|az|ar|ca|co|ct|de|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|va|wa|wv|wi|wy|dc)\b/i.test(loc)) return true;
-
-  // Check against non-US term list
+  // Check non-US terms FIRST — before state abbreviation check, so "Bangalore, IN"
+  // is caught by "bangalore" / "india" before `, IN` (Indiana) triggers a false positive.
   for (const term of NON_US_TERMS) {
     if (loc.includes(term)) return false;
   }
+
+  // US state abbreviation after a comma (e.g., "San Francisco, CA")
+  if (/,\s*(al|ak|az|ar|ca|co|ct|de|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|va|wa|wv|wi|wy|dc)\b/i.test(loc)) return true;
 
   // Default: include (better to over-include than drop valid US jobs)
   return true;
