@@ -20,7 +20,9 @@ export type AtsSource =
   | 'successfactors'
   | 'pinpoint'
   | 'manatal'
-  | 'rippling';
+  | 'rippling'
+  | 'jobicy'
+  | 'weworkremotely';
 
 export interface Job {
   id: string;

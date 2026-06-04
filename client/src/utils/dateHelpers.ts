@@ -51,4 +51,6 @@ export const ATS_LABELS: Record<string, string> = {
   pinpoint: 'Pinpoint',
   manatal: 'Manatal',
   rippling: 'Rippling',
+  jobicy: 'Jobicy',
+  weworkremotely: 'We Work Remotely',
 };

@@ -13,6 +13,8 @@ import { themuseScraper } from './themuse';
 import { getroScraper } from './getro';
 import { placeholderScraper } from './placeholder';
 import { ripplingScraper } from './rippling';
+import { jobicyScraper } from './jobicy';
+import { weworkremotelyScraper } from './weworkremotely';
 import { isUSOrRemote } from '../utils/filterUS';
 import { getIndustry } from '../constants/industries';
 
@@ -32,6 +34,8 @@ const SCRAPERS: Array<{ name: string; fn: Scraper }> = [
   { name: 'themuse', fn: themuseScraper },
   { name: 'getro (vc boards)', fn: getroScraper },
   { name: 'rippling', fn: ripplingScraper },
+  { name: 'jobicy', fn: jobicyScraper },
+  { name: 'weworkremotely', fn: weworkremotelyScraper },
   { name: 'placeholder', fn: placeholderScraper },
 ];
 
