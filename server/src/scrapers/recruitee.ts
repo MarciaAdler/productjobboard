@@ -66,6 +66,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           daysSincePosted: daysSince(postedAt),
           ...parseSalary(salaryStr),
           applyUrl: o.careers_apply_url || o.careers_url,
+          industry: null,
           companyDescription: null,
           descriptionText: descText,
           requirements: reqText,

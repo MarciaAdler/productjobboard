@@ -91,6 +91,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           daysSincePosted: daysSince(postedAt),
           ...extractAshbyCompensation(j.compensation),
           applyUrl: j.applyUrl || j.jobUrl || `https://jobs.ashbyhq.com/${slug}/${j.id}`,
+          industry: null,
           companyDescription: companyDesc,
           descriptionText: descText,
           requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,

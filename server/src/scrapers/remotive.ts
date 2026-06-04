@@ -57,6 +57,7 @@ export async function remotiveScraper(): Promise<Job[]> {
           daysSincePosted: daysSince(j.publication_date),
           ...parseSalary(j.salary || null),
           applyUrl: j.url,
+          industry: null,
           companyDescription: null,
           descriptionText: descText.slice(0, 2000),
           requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,

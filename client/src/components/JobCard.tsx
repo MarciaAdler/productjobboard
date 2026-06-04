@@ -44,7 +44,14 @@ export function JobCard({ job, isSelected, onClick }: JobCardProps) {
               }`}>
                 {job.title}
               </h3>
-              <p className="text-sm text-slate-600 mt-0.5 truncate">{job.company}</p>
+              <div className="flex items-center gap-2 mt-0.5 min-w-0">
+                <p className="text-sm text-slate-600 truncate">{job.company}</p>
+                {job.industry && (
+                  <span className="flex-shrink-0 text-xs font-medium px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                    {job.industry}
+                  </span>
+                )}
+              </div>
             </div>
             <StatusBadge postedAt={job.postedAt} />
           </div>

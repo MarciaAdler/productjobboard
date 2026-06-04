@@ -53,6 +53,7 @@ export async function remoteokScraper(): Promise<Job[]> {
           salaryMin: hasSalary ? j.salary_min : null,
           salaryMax: hasSalary && j.salary_max > 0 ? j.salary_max : null,
           applyUrl: j.apply_url || j.url,
+          industry: null,
           companyDescription: null,
           descriptionText: descText.slice(0, 2000),
           requirements: null,

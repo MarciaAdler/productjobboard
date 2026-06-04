@@ -133,6 +133,7 @@ async function fetchCompany(company: typeof WORKDAY_COMPANIES[0]): Promise<Job[]
           daysSincePosted: daysSince(postedAt),
           ...parseSalary(null),
           applyUrl: `${baseUrl}/en-US/${board}${p.externalPath}`,
+          industry: null,
           companyDescription: null,
           descriptionText: null,
           requirements: null,

@@ -91,7 +91,8 @@ async function fetchDetail(slug: string, item: RipplingListItem): Promise<Job | 
       daysSincePosted: daysSince(postedAt),
       ...salary,
       applyUrl: d.url || item.url,
-      companyDescription: companyText ? companyText.slice(0, 500) : null,
+      industry: null,
+          companyDescription: companyText ? companyText.slice(0, 500) : null,
       descriptionText: roleText ? roleText.slice(0, 2000) : fullText.slice(0, 2000),
       requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
     };

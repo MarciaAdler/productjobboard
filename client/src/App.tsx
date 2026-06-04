@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { SearchBar } from './components/SearchBar';
 import { DateFilter, DateFilter as DateFilterType } from './components/DateFilter';
 import { LocationFilter, matchesLocation } from './components/LocationFilter';
+import { IndustryFilter, matchesIndustry } from './components/IndustryFilter';
 import { JobList } from './components/JobList';
 import { JobDrawer } from './components/JobDrawer';
 
@@ -14,6 +15,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
   const [locationFilter, setLocationFilter] = useState('');
+  const [industryFilter, setIndustryFilter] = useState('');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   const filteredJobs = useMemo(() => {
@@ -29,15 +31,17 @@ export default function App() {
         if (dateFilter === '30d') return job.daysSincePosted <= 30;
         return true;
       })
-      .filter(job => matchesLocation(job, locationFilter));
+      .filter(job => matchesLocation(job, locationFilter))
+      .filter(job => matchesIndustry(job, industryFilter));
   }, [jobs, searchQuery, dateFilter, locationFilter]);
 
-  const hasFilters = searchQuery !== '' || dateFilter !== 'all' || locationFilter !== '';
+  const hasFilters = searchQuery !== '' || dateFilter !== 'all' || locationFilter !== '' || industryFilter !== '';
 
   function clearFilters() {
     setSearchQuery('');
     setDateFilter('all');
     setLocationFilter('');
+    setIndustryFilter('');
   }
 
   function handleSelect(job: Job) {
@@ -56,6 +60,7 @@ export default function App() {
               <SearchBar value={searchQuery} onChange={setSearchQuery} />
             </div>
             <LocationFilter jobs={jobs} value={locationFilter} onChange={setLocationFilter} />
+            <IndustryFilter jobs={jobs} value={industryFilter} onChange={setIndustryFilter} />
             <DateFilter active={dateFilter} onChange={setDateFilter} />
           </div>
         </div>

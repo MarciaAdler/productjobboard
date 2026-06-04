@@ -35,6 +35,7 @@ export interface Job {
   salaryMin: number | null;
   salaryMax: number | null;
   applyUrl: string;
+  industry: string | null;
   companyDescription: string | null;
   descriptionText: string | null;
   requirements: string | null;

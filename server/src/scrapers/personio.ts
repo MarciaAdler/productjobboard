@@ -82,7 +82,8 @@ async function fetchCompany(company: typeof PERSONIO_COMPANIES[0]): Promise<Job[
         daysSincePosted: daysSince(postedAt),
         ...parseSalary(salary || null),
         applyUrl: `https://${slug}.jobs.personio.${tld}/job/${id}`,
-        companyDescription: null,
+        industry: null,
+          companyDescription: null,
         descriptionText: descText ? descText.slice(0, 2000) : null,
         requirements: reqMatch ? reqMatch[1].trim().slice(0, 1000) : null,
       });
