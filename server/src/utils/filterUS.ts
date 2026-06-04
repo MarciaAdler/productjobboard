@@ -1,10 +1,11 @@
 import { Job } from '../types/job';
 
-// Sources that are inherently global-remote — never filter
-const ALWAYS_INCLUDE_SOURCES = new Set<string>(['remotive', 'remoteok']);
-
-// Location substrings that indicate non-US locations
+// Location substrings that indicate non-US locations.
+// Checked BEFORE the US state-abbreviation regex so that e.g. "Bangalore, IN"
+// is caught by "bangalore" / "india" before ", IN" (Indiana) fires.
 const NON_US_TERMS = [
+  // Europe (generic)
+  'europe', 'european union', ' eu,', ', eu',
   // UK / Ireland
   'united kingdom', ' uk,', ', uk', 'england', 'scotland', 'wales',
   'london', 'manchester', 'birmingham', 'edinburgh', 'glasgow', 'bristol', 'dublin, ireland',
@@ -29,41 +30,52 @@ const NON_US_TERMS = [
   'china', 'beijing', 'shanghai', 'shenzhen',
   'hong kong', 'taiwan', 'taipei',
   'new zealand', 'auckland',
+  // Canada (remote-Canada roles are not US-accessible)
+  'canada', 'toronto', 'vancouver', 'montreal', 'calgary', 'ottawa', 'ontario',
+  'british columbia', 'alberta', 'quebec',
   // LatAm
   'brazil', 'são paulo', 'sao paulo', 'rio de janeiro',
   'argentina', 'buenos aires',
   'colombia', 'bogotá', 'bogota',
   'chile', 'santiago',
+  'mexico', 'ciudad de méxico', 'cdmx',
   // Middle East
   'israel', 'tel aviv',
   'dubai', 'uae', 'abu dhabi', 'saudi arabia',
+  // Africa
+  'south africa', 'nigeria', 'kenya', 'nairobi',
 ];
 
+// Phrases that signal a truly global/open remote role → always include.
+const GLOBAL_REMOTE_RE = /\b(worldwide|global|anywhere|work from home|wfh)\b/i;
+const US_SIGNAL_RE = /\b(north america|americas|united states|usa|us only|us[-\s]based)\b/i;
+// US state abbreviation at end of a location component (e.g. "San Francisco, CA").
+const US_STATE_RE = /,\s*(al|ak|az|ar|ca|co|ct|de|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|va|wa|wv|wi|wy|dc)\b/i;
+
 export function isUSOrRemote(job: Job): boolean {
-  // Platform-level bypass: always include remote-only sources
-  if (ALWAYS_INCLUDE_SOURCES.has(job.atsSource)) return true;
-
-  // Explicitly marked remote
-  if (job.isRemote) return true;
-
   const loc = (job.location || '').toLowerCase();
 
-  // Unknown → be inclusive
+  // Blank / generic unknown → be inclusive
   if (!loc || loc === 'unknown' || loc === 'various' || loc === 'multiple locations') return true;
 
-  // Explicit remote/global signals
-  if (/\b(remote|worldwide|global|anywhere|work from home|wfh)\b/.test(loc)) return true;
-  if (/\b(north america|americas|united states|usa)\b/.test(loc)) return true;
+  // Truly global remote signals → include regardless of country
+  if (GLOBAL_REMOTE_RE.test(loc)) return true;
 
-  // Check non-US terms FIRST — before state abbreviation check, so "Bangalore, IN"
-  // is caught by "bangalore" / "india" before `, IN` (Indiana) triggers a false positive.
+  // Explicit US signal → include
+  if (US_SIGNAL_RE.test(loc)) return true;
+
+  // Non-US country check — runs BEFORE the isRemote / state-abbr shortcuts so that
+  // "Remote (UK)", "Remote - Canada", "Bangalore, IN" are all correctly excluded.
   for (const term of NON_US_TERMS) {
     if (loc.includes(term)) return false;
   }
 
-  // US state abbreviation after a comma (e.g., "San Francisco, CA")
-  if (/,\s*(al|ak|az|ar|ca|co|ct|de|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|va|wa|wv|wi|wy|dc)\b/i.test(loc)) return true;
+  // Vague "remote" with no country specified → include
+  if (job.isRemote || /\bremote\b/.test(loc)) return true;
 
-  // Default: include (better to over-include than drop valid US jobs)
+  // US state abbreviation (e.g. "Austin, TX") → include
+  if (US_STATE_RE.test(loc)) return true;
+
+  // Default: include (better to over-include than miss valid US roles)
   return true;
 }

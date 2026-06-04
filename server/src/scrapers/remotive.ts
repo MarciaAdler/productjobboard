@@ -24,11 +24,20 @@ interface RemotiveResponse {
 function isUSOrGlobal(location: string): boolean {
   if (!location || !location.trim()) return true;
   const loc = location.toLowerCase();
-  if (/\b(worldwide|anywhere|global|remote)\b/.test(loc)) return true;
-  if (/\b(usa|united states|north america|americas)\b/.test(loc)) return true;
+  if (/\b(worldwide|anywhere|global)\b/.test(loc)) return true;
+  if (/\b(usa|united states|north america|americas|us only)\b/.test(loc)) return true;
   if (/^usa[,;]/.test(loc) || /[,;]\s*usa\b/.test(loc)) return true;
-  // Clearly non-US regions
-  if (/^(europe|uk|germany|france|spain|australia|india|asia|latin america|latam|apac)$/i.test(loc.trim())) return false;
+  // Exclude any location that mentions a specific non-US region/country
+  const nonUS = [
+    'europe', 'uk', 'united kingdom', 'germany', 'france', 'spain', 'netherlands',
+    'australia', 'india', 'canada', 'asia', 'latin america', 'latam', 'apac',
+    'brazil', 'argentina', 'colombia', 'mexico', 'israel', 'south africa',
+    'sweden', 'norway', 'denmark', 'finland', 'poland', 'portugal', 'italy',
+    'switzerland', 'austria', 'belgium', 'singapore', 'japan', 'china', 'korea',
+  ];
+  for (const term of nonUS) {
+    if (loc.includes(term)) return false;
+  }
   return true;
 }
 
