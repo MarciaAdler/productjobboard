@@ -53,6 +53,7 @@ const INDUSTRY_MAP: Record<string, string> = {
 
   // HR Tech
   workday: 'HR Tech',
+  smartrecruiters: 'HR Tech',
   lattice: 'HR Tech',
   gusto: 'HR Tech',
   deel: 'HR Tech',
