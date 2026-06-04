@@ -14,6 +14,7 @@ import { getroScraper } from './getro';
 import { placeholderScraper } from './placeholder';
 import { ripplingScraper } from './rippling';
 import { isUSOrRemote } from '../utils/filterUS';
+import { getIndustry } from '../constants/industries';
 
 type Scraper = () => Promise<Job[]>;
 
@@ -66,9 +67,15 @@ export async function runAll(): Promise<Job[]> {
     return true;
   });
 
-  // Sort by postedAt descending (newest first)
-  unique.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
+  // Enrich with industry from company name lookup
+  const enriched = unique.map(job => ({
+    ...job,
+    industry: job.industry ?? getIndustry(job.company),
+  }));
 
-  console.log(`[scrapers] Done: ${unique.length} unique US/remote PM jobs in ${Date.now() - start}ms`);
-  return unique;
+  // Sort by postedAt descending (newest first)
+  enriched.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime());
+
+  console.log(`[scrapers] Done: ${enriched.length} unique US/remote PM jobs in ${Date.now() - start}ms`);
+  return enriched;
 }

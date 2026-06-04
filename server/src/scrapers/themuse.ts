@@ -64,6 +64,7 @@ export async function themuseScraper(): Promise<Job[]> {
         daysSincePosted: daysSince(j.publication_date),
         ...parseSalary(null),
         applyUrl: j.refs?.landing_page || '',
+        industry: null,
         companyDescription: null,
         descriptionText: trimAtBoundary(descText, 3000),
         requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,

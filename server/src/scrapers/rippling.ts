@@ -91,6 +91,7 @@ async function fetchDetail(slug: string, item: RipplingListItem): Promise<Job | 
       daysSincePosted: daysSince(postedAt),
       ...salary,
       applyUrl: d.url || item.url,
+      industry: null,
       companyDescription: companyText ? trimAtBoundary(companyText, 600) : null,
       descriptionText: roleText ? trimAtBoundary(roleText, 3000) : trimAtBoundary(fullText, 3000),
       requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,

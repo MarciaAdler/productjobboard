@@ -86,6 +86,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
         daysSincePosted: daysSince(postedAt),
         ...parseSalary(null),
         applyUrl: merged.applyUrl || `https://jobs.smartrecruiters.com/${slug}/${j.id}`,
+        industry: null,
         companyDescription: companyDesc,
         descriptionText: descText ? trimAtBoundary(descText, 3000) : null,
         requirements: requirements ? trimAtBoundary(requirements, 1200) : null,

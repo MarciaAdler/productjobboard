@@ -58,6 +58,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           daysSincePosted: daysSince(postedAt),
           ...parseSalary(null),
           applyUrl: j.application_url || j.url || `https://apply.workable.com/${slug}/j/${id}`,
+          industry: null,
           companyDescription: companyDesc,
           descriptionText: descText ? trimAtBoundary(descText, 3000) : null,
           requirements: reqText ? trimAtBoundary(reqText, 1200) : null,

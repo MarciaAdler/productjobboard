@@ -48,6 +48,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           daysSincePosted: daysSince(postedAt),
           ...extractSalaryFromText(descText),
           applyUrl: j.absolute_url,
+          industry: null,
           companyDescription: null,
           descriptionText: trimAtBoundary(descText, 3000),
           requirements: reqMatch ? trimAtBoundary(reqMatch[1].trim(), 1200) : null,

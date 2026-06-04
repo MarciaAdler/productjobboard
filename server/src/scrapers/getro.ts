@@ -86,7 +86,8 @@ function mapGetroJob(raw: Record<string, unknown>, vcFirm: string): Job | null {
     daysSincePosted: daysSince(postedAt),
     ...parseSalary(salaryStr),
     applyUrl,
-    companyDescription: null,
+    industry: null,
+          companyDescription: null,
     descriptionText: descText,
     requirements: null,
   };

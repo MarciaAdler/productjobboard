@@ -62,6 +62,7 @@ async function fetchCompany(slug: string): Promise<Job[]> {
           daysSincePosted: daysSince(j.createdAt),
           ...parseSalary(salaryStr),
           applyUrl: j.applyUrl || j.hostedUrl,
+          industry: null,
           companyDescription: null,
           descriptionText: trimAtBoundary(desc, 3000),
           requirements: reqList ? trimAtBoundary(reqList.content.replace(/<[^>]+>/g, ' ').trim(), 1200) : null,
