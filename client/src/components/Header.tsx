@@ -12,7 +12,7 @@ export function Header({ jobCount, loading }: HeaderProps) {
           <img src="/job_icon.svg" alt="ProductJobs" className="w-8 h-8 flex-shrink-0" />
           <div>
             <span className="text-base font-bold text-slate-900 tracking-tight">ProductJobs</span>
-            <span className="hidden sm:inline text-slate-600 text-sm font-normal ml-2">PM roles across the web</span>
+            <span className="hidden sm:inline text-slate-600 text-sm font-normal ml-2">Product roles across the web</span>
           </div>
         </div>
 
