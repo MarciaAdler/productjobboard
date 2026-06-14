@@ -40,9 +40,9 @@ export function useJobs(): UseJobsResult {
     return () => { cancelled = true; };
   }, [tick]);
 
-  // Auto-refresh every hour
+  // Auto-refresh every 4 hours
   useEffect(() => {
-    const id = setInterval(() => setTick(t => t + 1), 60 * 60 * 1000);
+    const id = setInterval(() => setTick(t => t + 1), 4 * 60 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
 
